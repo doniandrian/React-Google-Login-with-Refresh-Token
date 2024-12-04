@@ -14,8 +14,8 @@ function App() {
       router={createBrowserRouter(
         createRoutesFromElements(
           <>
-            <Route path="/sign-in" element={<SignInPage />} />
-            <Route path="/" element={<HomePage />} />
+            <Route path="/signed-in" element={< HomePage />} />
+            <Route path="/" element={<SignInPage/>} />
           </>
         )
       )}
