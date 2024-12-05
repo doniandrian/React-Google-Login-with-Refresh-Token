@@ -1,6 +1,41 @@
 import { Box, Typography, Button } from "@mui/material";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import axios from 'axios'
+
+import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
+
+<GoogleLogin
+  onSuccess={credentialResponse => {
+    console.log(credentialResponse);
+  }}
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/>;
 
 function SignInPage() {
+  const Login = useGoogleLogin({
+    flow: 'auth-code',
+    onSuccess: async (tokenResponse: { code: string }) => {
+      try {
+        console.log(tokenResponse);
+        const response = await axios.post('http://localhost:3000/auth/google', {
+          code: tokenResponse.code,
+        });
+
+        
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error during authentication:', error);
+      }
+    },
+    onError: errorResponse => {
+      console.error('Login error:', errorResponse);
+    },
+  });
+
+
   return (
     <Box
       sx={{
@@ -68,6 +103,7 @@ function SignInPage() {
             color="primary"
             fullWidth
             sx={{ marginBottom: "16px" }}
+            onClick={() => Login()}
           >
             SIGN IN WITH GOOGLE (WITH REFRESH TOKEN)
           </Button>
