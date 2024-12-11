@@ -13,14 +13,18 @@
    git clone https://github.com/doniandrian/React-Google-Login-with-Refresh-Token.git
    ```
 3. Create an .env file and fill it with your google api key
-4. Install NPM packages
+4. Install NPM packages for both client and server
    ```sh
    npm install
    ```
-5. Run app 
+5. Run app for client
    ```sh
    npm run dev
    ```
-6. Open your browser and enter:
+6. Run app for server
+   ```sh
+   npm start
+   ```
+7. Open your browser and enter:
    `http://localhost:5173/`
 
