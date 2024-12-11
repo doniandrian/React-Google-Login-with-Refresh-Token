@@ -12,7 +12,7 @@
    ```sh
    git clone https://github.com/doniandrian/React-Google-Login-with-Refresh-Token.git
    ```
-3. Create an .env file and fill it with your google api key
+3. Create an .env file and fill it with your google api key (client_id for client) and (client_id and client_secret for server)
 4. Install NPM packages for both client and server
    ```sh
    npm install
