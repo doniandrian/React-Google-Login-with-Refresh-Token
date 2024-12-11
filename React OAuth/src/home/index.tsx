@@ -1,5 +1,6 @@
-import { Box, Typography, styled, keyframes, Button } from "@mui/material";
-import { useState } from "react";
+import { Box, Typography, Avatar, Button, styled, keyframes } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Animasi bounce untuk logo
 const Bounce = keyframes`
@@ -19,8 +20,32 @@ const BounceImage = styled("img")`
   animation: ${Bounce} 1s ease-in-out infinite;
 `;
 
-// Komponen utama
-function HomePage({ userName, onLogout }: { userName: string; onLogout: () => void }) {
+function HomePage() {
+  const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState<any>(null);
+
+  useEffect(() => {
+    // Ambil data pengguna dari sessionStorage
+    const storedUserInfo = sessionStorage.getItem("userInfo");
+    if (storedUserInfo) {
+      setUserInfo(JSON.parse(storedUserInfo));
+    } else {
+      // Redirect ke halaman login jika tidak ada data pengguna
+      navigate("/");
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    // Hapus data pengguna dari sessionStorage
+    sessionStorage.clear();
+    // Redirect ke halaman login
+    navigate("/");
+  };
+
+  if (!userInfo) {
+    return null; // Bisa tambahkan spinner loading di sini
+  }
+
   return (
     <Box
       sx={{
@@ -32,22 +57,29 @@ function HomePage({ userName, onLogout }: { userName: string; onLogout: () => vo
         backgroundColor: "#87CEEB",
       }}
     >
-      {/* Logo */}
+      {/* Logo Google */}
       <BounceImage
         src="../google-logo.svg"
         alt="Google Logo"
         width="70"
         height="70"
       />
-      
+
+      {/* Foto Profil */}
+      <Avatar
+        alt={userInfo.name}
+        src={userInfo.picture}
+        sx={{ width: 100, height: 100, marginBottom: "16px" }}
+      />
+
       {/* Nama User */}
       <Typography variant="h5" color="white" gutterBottom>
-        Welcome, {userName}!
+        Welcome, {userInfo.name}!
       </Typography>
 
-      {/* Pesan Logged In */}
-      <Typography variant="h6" color="white" gutterBottom>
-        You're logged in with Google
+      {/* Email User */}
+      <Typography variant="body1" color="white" gutterBottom>
+        Email: {userInfo.email}
       </Typography>
 
       {/* Tombol Logout */}
@@ -55,7 +87,7 @@ function HomePage({ userName, onLogout }: { userName: string; onLogout: () => vo
         variant="contained"
         color="error"
         sx={{ mt: 2 }}
-        onClick={onLogout}
+        onClick={handleLogout}
       >
         Logout
       </Button>
@@ -63,28 +95,4 @@ function HomePage({ userName, onLogout }: { userName: string; onLogout: () => vo
   );
 }
 
-// Parent Component (Simulasi Data dan Logout)
-function App() {
-  const [userName, setUserName] = useState("John Doe"); // Contoh data nama user
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Status login
-
-  const handleLogout = () => {
-    // Logika logout, misalnya menghapus token
-    setIsLoggedIn(false);
-    console.log("User has logged out!");
-  };
-
-  return (
-    <>
-      {isLoggedIn ? (
-        <HomePage userName={userName} onLogout={handleLogout} />
-      ) : (
-        <Typography variant="h4" align="center" sx={{ mt: 5 }}>
-          You have logged out.
-        </Typography>
-      )}
-    </>
-  );
-}
-
-export default App;
+export default HomePage;

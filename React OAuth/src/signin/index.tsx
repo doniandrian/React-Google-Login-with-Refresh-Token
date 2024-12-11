@@ -8,23 +8,45 @@ function SignInPage() {
   const navigate = useNavigate();
 
   const LogindenganRefreshToken = useGoogleLogin({
-    flow: 'auth-code',
+    flow: "auth-code",
     onSuccess: async (tokenResponse) => {
       try {
-        console.log(tokenResponse);
-        const response = await axios.post('http://localhost:3000/auth/google', {
+        console.log("Token Response:", tokenResponse);
+
+        // Kirim authorization code ke backend untuk mendapatkan access_token
+        const response = await axios.post("http://localhost:3000/auth/google", {
           code: tokenResponse.code,
         });
-        console.log(response.data);
+
+        const { access_token } = response.data; // Dapatkan access_token
+        console.log("Access Token:", access_token);
+
+        // Ambil data user dari Google UserInfo endpoint
+        const userInfoResponse = await axios.get(
+          "https://www.googleapis.com/oauth2/v1/userinfo?alt=json",
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+
+        const userInfo = userInfoResponse.data; // Informasi user
+        console.log("User Info:", userInfo);
+
+        // Simpan data pengguna ke sessionStorage
+        sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+
+        // Redirect ke halaman /homepage
+        navigate("/homepage");
       } catch (error) {
-        console.error('Error during authentication:', error);
+        console.error("Error during authentication:", error);
       }
     },
-    onError: errorResponse => {
-      console.error('Login error:', errorResponse);
+    onError: (errorResponse) => {
+      console.error("Login error:", errorResponse);
     },
   });
-
 
   
 

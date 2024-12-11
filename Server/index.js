@@ -39,6 +39,28 @@ app.post('/auth/google', async (req, res) => {
     res.status(500).json({ error: 'Failed to exchange token' });
   }
 });
+app.post('/auth/google/userinfo', async (req, res) => {
+  try {
+    const { access_token } = req.body;
+
+    if (!access_token) {
+      return res.status(400).json({ error: "Access token is required" });
+    }
+
+    const userInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json";
+    const userInfoResponse = await axios.get(userInfoUrl, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    res.json(userInfoResponse.data);
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+    res.status(500).json({ error: "Failed to fetch user info" });
+  }
+});
+
 
 app.post('/auth/google/refresh-token', async (req, res) => {
   try {
