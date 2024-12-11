@@ -18,7 +18,7 @@ function App() {
     createRoutesFromElements(
       <>
         <Route path="/" element={<SignInPage />} />
-        <Route path="/sign-in" element={<HomePage />} />
+        <Route path="/homepage" element={<HomePage />} />
       </>
     )
   );
