@@ -3,8 +3,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {jwtDecode} from "jwt-decode"; // Untuk decode credential
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { useTranslation } from "react-i18next"; // Import hook i18n
 
 function SignInPage() {
+  const { t } = useTranslation(); // hook untuk mengambil string terjemahan
   const navigate = useNavigate();
 
   const LogindenganRefreshToken = useGoogleLogin({
@@ -18,7 +20,7 @@ function SignInPage() {
           code: tokenResponse.code,
         });
 
-        const { access_token } = response.data; // Dapatkan access_token
+        const { access_token } = response.data; // mendapatkan access_token
         console.log("Access Token (Refresh Token):", access_token);
 
         // Ambil data user dari Google UserInfo endpoint
@@ -85,7 +87,7 @@ function SignInPage() {
         boxShadow={2}
       >
         <Typography variant="h4" gutterBottom>
-          Sign In
+          {t("signIn")} {/* Gunakan string dari i18n */}
         </Typography>
         <Box>
           {/* Login biasa */}
@@ -104,7 +106,7 @@ function SignInPage() {
             sx={{ marginTop: "16px" }}
             onClick={() => LogindenganRefreshToken()}
           >
-            SIGN IN WITH GOOGLE (WITH REFRESH TOKEN)
+            {t("signInWithRefreshToken")} {/* Gunakan string dari i18n */}
           </Button>
         </Box>
       </Box>

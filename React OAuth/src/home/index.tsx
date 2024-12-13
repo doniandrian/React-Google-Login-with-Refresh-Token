@@ -1,6 +1,7 @@
 import { Box, Typography, Avatar, Button, styled, keyframes } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // Import hook i18n
 
 // Animasi bounce untuk logo
 const Bounce = keyframes`
@@ -21,6 +22,7 @@ const BounceImage = styled("img")`
 `;
 
 function HomePage() {
+  const { t } = useTranslation(); // Gunakan hook i18n
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState<any>(null);
 
@@ -74,12 +76,12 @@ function HomePage() {
 
       {/* Nama User */}
       <Typography variant="h5" color="white" gutterBottom>
-        Welcome, {userInfo.name}!
+        {t("welcome")}, {userInfo.name}!
       </Typography>
 
       {/* Email User */}
       <Typography variant="body1" color="white" gutterBottom>
-        Email: {userInfo.email}
+        {t("email")}: {userInfo.email}
       </Typography>
 
       {/* Tombol Logout */}
@@ -89,7 +91,7 @@ function HomePage() {
         sx={{ mt: 2 }}
         onClick={handleLogout}
       >
-        Logout
+        {t("logout")} {/* Gunakan string dari i18n */}
       </Button>
     </Box>
   );
