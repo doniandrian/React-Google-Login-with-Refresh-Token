@@ -1,6 +1,20 @@
-import { Box, Typography, Avatar, Button, styled, keyframes } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Avatar,
+  Button,
+  styled,
+  keyframes,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Define an interface for UserInfo
+interface UserInfo {
+  name: string;
+  email: string;
+  picture?: string;
+}
 
 // Animasi bounce untuk logo
 const Bounce = keyframes`
@@ -20,9 +34,16 @@ const BounceImage = styled("img")`
   animation: ${Bounce} 1s ease-in-out infinite;
 `;
 
-function HomePage() {
+// Define props interface for HomePage
+interface HomePageProps {
+  defaultProfilePicture?: string;
+}
+
+function HomePage({
+  defaultProfilePicture = "/default-avatar.png",
+}: HomePageProps) {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState<any>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   useEffect(() => {
     // Ambil data pengguna dari sessionStorage
@@ -68,7 +89,7 @@ function HomePage() {
       {/* Foto Profil */}
       <Avatar
         alt={userInfo.name}
-        src={userInfo.picture}
+        src={userInfo.picture || defaultProfilePicture}
         sx={{ width: 100, height: 100, marginBottom: "16px" }}
       />
 
@@ -94,5 +115,10 @@ function HomePage() {
     </Box>
   );
 }
+
+// Default props
+HomePage.defaultProps = {
+  defaultProfilePicture: "/default-avatar.png",
+};
 
 export default HomePage;

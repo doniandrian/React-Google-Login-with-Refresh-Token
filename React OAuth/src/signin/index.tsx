@@ -1,37 +1,53 @@
 import { Box, Typography, Button } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode"; // Untuk decode credential
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import {
+  GoogleLogin,
+  useGoogleLogin,
+  CredentialResponse,
+} from "@react-oauth/google";
+// Define type data
+interface UserInfo {
+  name: string;
+  email: string;
+  picture?: string;
+  sub?: string;
+}
+
+interface GoogleTokenResponse {
+  code: string;
+}
 
 function SignInPage() {
   const navigate = useNavigate();
 
-  const LogindenganRefreshToken = useGoogleLogin({
+  const handleRefreshTokenLogin = useGoogleLogin({
     flow: "auth-code",
-    onSuccess: async (tokenResponse) => {
+    onSuccess: async (tokenResponse: GoogleTokenResponse) => {
       try {
         console.log("Token Response (Refresh Token):", tokenResponse);
 
-        // Kirim authorization code ke backend untuk mendapatkan access_token
-        const response = await axios.post("http://localhost:3000/auth/google", {
-          code: tokenResponse.code,
-        });
+        // Kirim authorization code ke backend untuk mendapatkan accessToken
+        const response = await axios.post<{ accessToken: string }>(
+          "http://localhost:3000/auth/google",
+          { code: tokenResponse.code },
+        );
 
-        const { access_token } = response.data; // Dapatkan access_token
-        console.log("Access Token (Refresh Token):", access_token);
+        const { accessToken } = response.data;
+        console.log("Access Token (Refresh Token):", accessToken);
 
         // Ambil data user dari Google UserInfo endpoint
-        const userInfoResponse = await axios.get(
+        const userInfoResponse = await axios.get<UserInfo>(
           "https://www.googleapis.com/oauth2/v1/userinfo?alt=json",
           {
             headers: {
-              Authorization: `Bearer ${access_token}`,
+              Authorization: `Bearer ${accessToken}`,
             },
-          }
+          },
         );
 
-        const userInfo = userInfoResponse.data; // Informasi user
+        const userInfo = userInfoResponse.data;
         console.log("User Info (Refresh Token):", userInfo);
 
         // Simpan data pengguna ke sessionStorage
@@ -40,21 +56,41 @@ function SignInPage() {
         // Redirect ke halaman /homepage
         navigate("/homepage");
       } catch (error) {
-        console.error("Error during authentication (Refresh Token):", error);
+        // More detailed error handling
+        if (axios.isAxiosError(error)) {
+          console.error(
+            "Authentication Error:",
+            error.response?.data || error.message,
+          );
+        } else {
+          console.error("Unexpected error during authentication:", error);
+        }
+
+        alert("Login failed. Please try again.");
       }
     },
     onError: (errorResponse) => {
       console.error("Login error (Refresh Token):", errorResponse);
+      alert("Google login failed. Please try again.");
     },
   });
 
-  const handleGoogleLoginSuccess = (credentialResponse: any) => {
+  const handleGoogleLoginSuccess = (credentialResponse: CredentialResponse) => {
     try {
       console.log("Token Response (Google Login):", credentialResponse);
 
+      if (!credentialResponse.credential) {
+        throw new Error("No credential received");
+      }
+
       // Decode credential untuk mendapatkan informasi pengguna
-      const userInfo = jwtDecode(credentialResponse.credential);
+      const userInfo = jwtDecode<UserInfo>(credentialResponse.credential);
       console.log("User Info (Google Login):", userInfo);
+
+      // Validasi data pengguna
+      if (!userInfo.email) {
+        throw new Error("Invalid user information");
+      }
 
       // Simpan data pengguna ke sessionStorage
       sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
@@ -62,7 +98,8 @@ function SignInPage() {
       // Redirect ke halaman /homepage
       navigate("/homepage");
     } catch (error) {
-      console.error("Error decoding credential (Google Login):", error);
+      console.error("Error during Google Login:", error);
+      alert("Login failed. Please try again.");
     }
   };
 
@@ -73,6 +110,7 @@ function SignInPage() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        backgroundColor: "#f0f2f5", // Tambahkan background color
       }}
     >
       <Box
@@ -81,18 +119,35 @@ function SignInPage() {
           borderRadius: "8px",
           padding: "32px",
           width: "400px",
+          textAlign: "center", // Tambahkan text alignment
+          boxShadow: 3, // Gunakan predefined boxShadow
         }}
-        boxShadow={2}
       >
-        <Typography variant="h4" gutterBottom>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            marginBottom: "24px",
+            color: "#333", // Tambahkan warna yang lebih kontras
+            fontWeight: "bold",
+          }}
+        >
           Sign In
         </Typography>
-        <Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+          }}
+        >
           {/* Login biasa */}
           <GoogleLogin
             onSuccess={handleGoogleLoginSuccess}
             onError={() => {
               console.error("Login Failed");
+              alert("Google login failed. Please try again.");
             }}
           />
 
@@ -101,10 +156,9 @@ function SignInPage() {
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ marginTop: "16px" }}
-            onClick={() => LogindenganRefreshToken()}
+            onClick={() => handleRefreshTokenLogin()}
           >
-            SIGN IN WITH GOOGLE (WITH REFRESH TOKEN)
+            Sign In with Google (Refresh Token)
           </Button>
         </Box>
       </Box>
