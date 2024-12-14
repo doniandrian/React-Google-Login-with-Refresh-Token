@@ -1,5 +1,4 @@
 import "./App.css";
-import Blank from "./";
 import {
   Route,
   createBrowserRouter,
