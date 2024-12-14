@@ -1,0 +1,41 @@
+import { styled, keyframes } from "@mui/material";
+
+// Animasi bounce untuk logo
+export const Bounce = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
+
+// Styled component untuk logo
+export const BounceImage = styled("img")`
+  animation: ${Bounce} 1s ease-in-out infinite;
+`;
+
+// Style umum untuk kontainer utama
+export const mainContainerStyles = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
+  backgroundColor: "#87CEEB",
+};
+
+// Style untuk avatar
+export const avatarStyles = {
+  width: 100,
+  height: 100,
+  marginBottom: "16px",
+};
+
+// Style untuk tombol logout
+export const logoutButtonStyles = {
+  mt: 2,
+};

@@ -1,24 +1,7 @@
-import { Box, Typography, Avatar, Button, styled, keyframes } from "@mui/material";
+import { Box, Typography, Avatar, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-// Animasi bounce untuk logo
-const Bounce = keyframes`
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-`;
-
-// Styled component untuk logo
-const BounceImage = styled("img")`
-  animation: ${Bounce} 1s ease-in-out infinite;
-`;
+import "./HomepageStyle.css"; // Impor file CSS Module
 
 function HomePage() {
   const navigate = useNavigate();
@@ -47,18 +30,9 @@ function HomePage() {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#87CEEB",
-      }}
-    >
+    <Box>
       {/* Logo Google */}
-      <BounceImage
+      <img
         src="../google-logo.svg"
         alt="Google Logo"
         width="70"
@@ -69,7 +43,6 @@ function HomePage() {
       <Avatar
         alt={userInfo.name}
         src={userInfo.picture}
-        sx={{ width: 100, height: 100, marginBottom: "16px" }}
       />
 
       {/* Nama User */}
@@ -86,7 +59,6 @@ function HomePage() {
       <Button
         variant="contained"
         color="error"
-        sx={{ mt: 2 }}
         onClick={handleLogout}
       >
         Logout
