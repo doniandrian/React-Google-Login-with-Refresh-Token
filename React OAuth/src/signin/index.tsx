@@ -1,9 +1,10 @@
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography} from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import styles from "./SignInStyles.css"; // Impor style yang dipisahkan
-
+import "./signin-styles.css"; // Impor style yang dipisahkan
+import SignInButton from "./signin-button";
+import GoogleLoginButton from "./login-button";
 import {
   GoogleLogin,
   useGoogleLogin,
@@ -100,37 +101,20 @@ function SignInPage() {
   };
 
   return (
-
-
-    <Box className={styles.container}>
-      <Box className={styles.card}>
+    <Box className="container">
+      <Box className="card">
         <Typography variant="h4" gutterBottom>
           Sign In
         </Typography>
         <Box>
-          {/* Login menggunakan Google JWT */}
-
-          <GoogleLogin
-            onSuccess={handleGoogleLoginSuccess} // Callback ketika login sukses
+          <GoogleLoginButton
+            onSuccess={handleGoogleLoginSuccess}
             onError={() => {
               console.error("Login Failed");
-
               alert("Google login failed. Please try again.");
             }}
-
           />
-
-          {/* Login menggunakan Refresh Token */}
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-
-            className={styles.refreshButton}
-            onClick={() => LogindenganRefreshToken()} // Trigger login dengan refresh token
-          >
-            {t("signInWithRefreshToken")} {/* Gunakan string dari i18n */}
-          </Button>
+          <SignInButton onClick={() => LogindenganRefreshToken()} />
         </Box>
       </Box>
     </Box>
