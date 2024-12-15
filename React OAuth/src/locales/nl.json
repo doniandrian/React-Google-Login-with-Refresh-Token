@@ -1,0 +1,8 @@
+{
+  "signIn": "Inloggen",
+  "signInWithGoogle": "Inloggen met Google",
+  "signInWithRefreshToken": "Inloggen met Google (met Refresh Token)",
+  "welcome": "Welkom",
+  "email": "E-mail",
+  "logout": "Uitloggen"
+}

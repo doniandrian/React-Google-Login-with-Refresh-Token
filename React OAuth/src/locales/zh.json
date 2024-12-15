@@ -1,0 +1,8 @@
+{
+  "signIn": "登录",
+  "signInWithGoogle": "使用Google登录",
+  "signInWithRefreshToken": "使用Google登录（刷新令牌）",
+  "welcome": "欢迎",
+  "email": "电子邮件",
+  "logout": "登出"
+}

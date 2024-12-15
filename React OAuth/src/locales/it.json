@@ -1,0 +1,8 @@
+{
+  "signIn": "Accedi",
+  "signInWithGoogle": "Accedi con Google",
+  "signInWithRefreshToken": "Accedi con Google (con Refresh Token)",
+  "welcome": "Benvenuto",
+  "email": "Email",
+  "logout": "Esci"
+}

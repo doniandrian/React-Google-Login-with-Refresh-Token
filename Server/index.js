@@ -41,16 +41,16 @@ app.post('/auth/google', async (req, res) => {
 });
 app.post('/auth/google/userinfo', async (req, res) => {
   try {
-    const { access_token } = req.body;
+    const { accessToken } = req.body;
 
-    if (!access_token) {
+    if (!accessToken) {
       return res.status(400).json({ error: "Access token is required" });
     }
 
     const userInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json";
     const userInfoResponse = await axios.get(userInfoUrl, {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 

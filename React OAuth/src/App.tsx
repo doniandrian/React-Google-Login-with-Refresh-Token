@@ -5,8 +5,11 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
-} from "react-router-dom"; // Library untuk manajemen routing
-import { GoogleOAuthProvider } from '@react-oauth/google'; // Library untuk integrasi Google OAuth
+
+} 
+from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 
 // Mengimpor halaman SignIn dan Home
 import SignInPage from "./signin"; 
@@ -16,6 +19,7 @@ import HomePage from "./home";
 function App() {
   // Mengambil clientId untuk Google OAuth dari variabel lingkungan
   const clientId = import.meta.env.VITE_CLIENT_ID;
+
   
   // Mendefinisikan router dengan dua route: "/" untuk halaman SignIn dan "/homepage" untuk halaman Home
   const router = createBrowserRouter(
@@ -23,8 +27,8 @@ function App() {
       <>
         <Route path="/" element={<SignInPage />} /> 
         <Route path="/homepage" element={<HomePage />} />
-      </>
-    )
+      </>,
+    ),
   );
 
   // Menyediakan konteks GoogleOAuthProvider dan router untuk seluruh aplikasi
