@@ -1,3 +1,4 @@
+
 import {
   Box,
   Typography,
@@ -9,6 +10,8 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next"; // Import hook i18n
+import "./HomepageStyle.css"; // Impor file CSS Module
+
 // Define an interface for UserInfo
 interface UserInfo {
   name: string;
@@ -34,6 +37,8 @@ const Bounce = keyframes`
 const BounceImage = styled("img")`
   animation: ${Bounce} 1s ease-in-out infinite;
 `;
+
+
 
 // Define props interface for HomePage
 interface HomePageProps {
@@ -70,18 +75,9 @@ function HomePage({
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#87CEEB",
-      }}
-    >
+    <Box>
       {/* Logo Google */}
-      <BounceImage
+      <img
         src="../google-logo.svg"
         alt="Google Logo"
         width="70"
@@ -91,8 +87,10 @@ function HomePage({
       {/* Foto Profil */}
       <Avatar
         alt={userInfo.name}
+
         src={userInfo.picture || defaultProfilePicture}
         sx={{ width: 100, height: 100, marginBottom: "16px" }}
+
       />
 
       {/* Nama User */}
@@ -109,7 +107,6 @@ function HomePage({
       <Button
         variant="contained"
         color="error"
-        sx={{ mt: 2 }}
         onClick={handleLogout}
       >
         {t("logout")} {/* Gunakan string dari i18n */}

@@ -2,6 +2,8 @@ import { Box, Typography, Button } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import styles from "./SignInStyles.css"; // Impor style yang dipisahkan
+
 import {
   GoogleLogin,
   useGoogleLogin,
@@ -24,18 +26,20 @@ function SignInPage() {
   const { t } = useTranslation(); // hook untuk mengambil string terjemahan
   const navigate = useNavigate();
 
+  // Login menggunakan Refresh Token (flow auth-code)
   const LogindenganRefreshToken = useGoogleLogin({
-    flow: "auth-code",
+    flow: "auth-code", // Menggunakan Authorization Code flow
     onSuccess: async (tokenResponse) => {
       try {
         console.log("Token Response (Refresh Token):", tokenResponse);
 
         // Kirim authorization code ke backend untuk mendapatkan access token
         const response = await axios.post("http://localhost:3000/auth/google", {
-          code: tokenResponse.code,
+          code: tokenResponse.code, // Authorization code dari Google
         });
 
         const { access_token } = response.data; // mendapatkan access token
+
         console.log("Access Token (Refresh Token):", access_token);
 
         // Ambil data user dari Google UserInfo endpoint
@@ -43,18 +47,18 @@ function SignInPage() {
           "https://www.googleapis.com/oauth2/v1/userinfo?alt=json",
           {
             headers: {
-              Authorization: `Bearer ${access_token}`,
+              Authorization: `Bearer ${access_token}`, // Gunakan access_token untuk autentikasi
             },
           }
         );
 
-        const userInfo = userInfoResponse.data; // Informasi user
+        const userInfo = userInfoResponse.data; // Data user
         console.log("User Info (Refresh Token):", userInfo);
 
-        // Simpan data pengguna ke sessionStorage
+        // Simpan data pengguna ke sessionStorage untuk keperluan aplikasi
         sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
 
-        // Redirect ke halaman /homepage
+        // Redirect ke halaman utama setelah login
         navigate("/homepage");
       } catch (error) {
         console.error("Error during authentication (Refresh Token):", error);
@@ -64,6 +68,7 @@ function SignInPage() {
       console.error("Login error (Refresh Token):", errorResponse);
     },
   });
+
 
   const handleGoogleLoginSuccess = (credentialResponse: CredentialResponse) => {
     try {
@@ -83,9 +88,10 @@ function SignInPage() {
       }
 
       // Simpan data pengguna ke sessionStorage
+
       sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
 
-      // Redirect ke halaman /homepage
+      // Redirect ke halaman utama setelah login
       navigate("/homepage");
     } catch (error) {
       console.error("Error during Google Login:", error);
@@ -94,59 +100,34 @@ function SignInPage() {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#f0f2f5", // Tambahkan background color
-      }}
-    >
-      <Box
-        sx={{
-          backgroundColor: "white",
-          borderRadius: "8px",
-          padding: "32px",
-          width: "400px",
-          textAlign: "center", // Tambahkan text alignment
-          boxShadow: 3, // Gunakan predefined boxShadow
-        }}
-      >
-        <Typography
-          variant="h4"
-          gutterBottom
-          sx={{
-            marginBottom: "24px",
-            color: "#333", // Tambahkan warna yang lebih kontras
-            fontWeight: "bold",
-          }}
-        >
-          {t("signIn")} {/* Gunakan string dari i18n */}
-        </Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
-        >
-          {/* Login biasa */}
+
+    <Box className={styles.container}>
+      <Box className={styles.card}>
+        <Typography variant="h4" gutterBottom>
+          Sign In
+        </Typography>
+        <Box>
+          {/* Login menggunakan Google JWT */}
+
           <GoogleLogin
-            onSuccess={handleGoogleLoginSuccess}
+            onSuccess={handleGoogleLoginSuccess} // Callback ketika login sukses
             onError={() => {
               console.error("Login Failed");
+
               alert("Google login failed. Please try again.");
             }}
+
           />
 
-          {/* Login dengan refresh token */}
+          {/* Login menggunakan Refresh Token */}
           <Button
             variant="contained"
             color="primary"
             fullWidth
-            onClick={() => LogindenganRefreshToken()}
+
+            className={styles.refreshButton}
+            onClick={() => LogindenganRefreshToken()} // Trigger login dengan refresh token
           >
             {t("signInWithRefreshToken")} {/* Gunakan string dari i18n */}
           </Button>

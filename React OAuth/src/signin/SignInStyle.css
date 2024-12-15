@@ -1,0 +1,21 @@
+/* src/signin/SignInStyles.module.css */
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Pusatkan konten secara vertikal dan horizontal */
+  }
+  
+  .card {
+    background-color: white; /* Latar belakang putih untuk card */
+    border-radius: 8px; /* Sudut membulat */
+    padding: 32px; /* Padding internal */
+    width: 400px; /* Lebar tetap untuk form */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Shadow untuk efek 3D */
+  }
+  
+  .refreshButton {
+    margin-top: 16px; /* Margin atas untuk tombol refresh */
+  }
+  
