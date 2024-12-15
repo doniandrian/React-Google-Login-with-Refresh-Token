@@ -2,7 +2,7 @@ import { Box, Typography} from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import "./signin-styles.css"; // Impor style yang dipisahkan
+import "./signin-style.css"; // Impor style yang dipisahkan
 import SignInButton from "./signin-button";
 import GoogleLoginButton from "./login-button";
 import {
