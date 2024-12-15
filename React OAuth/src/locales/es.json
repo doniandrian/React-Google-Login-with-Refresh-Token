@@ -1,0 +1,8 @@
+{
+  "signIn": "Iniciar sesión",
+  "signInWithGoogle": "Iniciar sesión con Google",
+  "signInWithRefreshToken": "Iniciar sesión con Google (con Refresh Token)",
+  "welcome": "Bienvenido",
+  "email": "Correo electrónico",
+  "logout": "Cerrar sesión"
+}

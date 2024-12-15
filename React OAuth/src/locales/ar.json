@@ -1,0 +1,8 @@
+{
+  "signIn": "تسجيل الدخول",
+  "signInWithGoogle": "تسجيل الدخول باستخدام Google",
+  "signInWithRefreshToken": "تسجيل الدخول باستخدام Google (برمز تحديث)",
+  "welcome": "مرحبًا بك",
+  "email": "البريد الإلكتروني",
+  "logout": "تسجيل الخروج"
+}

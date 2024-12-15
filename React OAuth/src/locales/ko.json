@@ -1,0 +1,8 @@
+{
+  "signIn": "로그인",
+  "signInWithGoogle": "Google로 로그인",
+  "signInWithRefreshToken": "Google로 로그인 (새로 고침 토큰 포함)",
+  "welcome": "환영합니다",
+  "email": "이메일",
+  "logout": "로그아웃"
+}

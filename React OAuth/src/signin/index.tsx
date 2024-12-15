@@ -18,36 +18,37 @@ interface UserInfo {
 interface GoogleTokenResponse {
   code: string;
 }
+import { useTranslation } from "react-i18next"; // Import hook i18n
 
 function SignInPage() {
+  const { t } = useTranslation(); // hook untuk mengambil string terjemahan
   const navigate = useNavigate();
 
-  const handleRefreshTokenLogin = useGoogleLogin({
+  const LogindenganRefreshToken = useGoogleLogin({
     flow: "auth-code",
-    onSuccess: async (tokenResponse: GoogleTokenResponse) => {
+    onSuccess: async (tokenResponse) => {
       try {
         console.log("Token Response (Refresh Token):", tokenResponse);
 
-        // Kirim authorization code ke backend untuk mendapatkan accessToken
-        const response = await axios.post<{ accessToken: string }>(
-          "http://localhost:3000/auth/google",
-          { code: tokenResponse.code },
-        );
+        // Kirim authorization code ke backend untuk mendapatkan access_token
+        const response = await axios.post("http://localhost:3000/auth/google", {
+          code: tokenResponse.code,
+        });
 
-        const { accessToken } = response.data;
-        console.log("Access Token (Refresh Token):", accessToken);
+        const { access_token } = response.data; // mendapatkan access_token
+        console.log("Access Token (Refresh Token):", access_token);
 
         // Ambil data user dari Google UserInfo endpoint
-        const userInfoResponse = await axios.get<UserInfo>(
+        const userInfoResponse = await axios.get(
           "https://www.googleapis.com/oauth2/v1/userinfo?alt=json",
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${access_token}`,
             },
-          },
+          }
         );
 
-        const userInfo = userInfoResponse.data;
+        const userInfo = userInfoResponse.data; // Informasi user
         console.log("User Info (Refresh Token):", userInfo);
 
         // Simpan data pengguna ke sessionStorage
@@ -56,22 +57,11 @@ function SignInPage() {
         // Redirect ke halaman /homepage
         navigate("/homepage");
       } catch (error) {
-        // More detailed error handling
-        if (axios.isAxiosError(error)) {
-          console.error(
-            "Authentication Error:",
-            error.response?.data || error.message,
-          );
-        } else {
-          console.error("Unexpected error during authentication:", error);
-        }
-
-        alert("Login failed. Please try again.");
+        console.error("Error during authentication (Refresh Token):", error);
       }
     },
     onError: (errorResponse) => {
       console.error("Login error (Refresh Token):", errorResponse);
-      alert("Google login failed. Please try again.");
     },
   });
 
@@ -132,7 +122,7 @@ function SignInPage() {
             fontWeight: "bold",
           }}
         >
-          Sign In
+          {t("signIn")} {/* Gunakan string dari i18n */}
         </Typography>
 
         <Box
@@ -156,9 +146,9 @@ function SignInPage() {
             variant="contained"
             color="primary"
             fullWidth
-            onClick={() => handleRefreshTokenLogin()}
+            onClick={() => LogindenganRefreshToken()}
           >
-            Sign In with Google (Refresh Token)
+            {t("signInWithRefreshToken")} {/* Gunakan string dari i18n */}
           </Button>
         </Box>
       </Box>
