@@ -30,12 +30,12 @@ function SignInPage() {
       try {
         console.log("Token Response (Refresh Token):", tokenResponse);
 
-        // Kirim authorization code ke backend untuk mendapatkan access_token
+        // Kirim authorization code ke backend untuk mendapatkan access token
         const response = await axios.post("http://localhost:3000/auth/google", {
           code: tokenResponse.code,
         });
 
-        const { access_token } = response.data; // mendapatkan access_token
+        const { access_token } = response.data; // mendapatkan access token
         console.log("Access Token (Refresh Token):", access_token);
 
         // Ambil data user dari Google UserInfo endpoint
