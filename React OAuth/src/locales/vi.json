@@ -1,0 +1,8 @@
+{
+  "signIn": "Đăng nhập",
+  "signInWithGoogle": "Đăng nhập bằng Google",
+  "signInWithRefreshToken": "Đăng nhập bằng Google (với Refresh Token)",
+  "welcome": "Chào mừng",
+  "email": "Email",
+  "logout": "Đăng xuất"
+}

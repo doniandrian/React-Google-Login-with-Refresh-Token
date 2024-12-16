@@ -1,0 +1,8 @@
+{
+  "signIn": "ログイン",
+  "signInWithGoogle": "Googleでログイン",
+  "signInWithRefreshToken": "Googleでログイン（リフレッシュトークン使用）",
+  "welcome": "ようこそ",
+  "email": "メール",
+  "logout": "ログアウト"
+}

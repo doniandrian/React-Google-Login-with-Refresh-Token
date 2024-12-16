@@ -1,0 +1,8 @@
+{
+  "signIn": "साइन इन करें",
+  "signInWithGoogle": "Google से साइन इन करें",
+  "signInWithRefreshToken": "Google से साइन इन करें (Refresh Token के साथ)",
+  "welcome": "स्वागत है",
+  "email": "ईमेल",
+  "logout": "लॉग आउट करें"
+}

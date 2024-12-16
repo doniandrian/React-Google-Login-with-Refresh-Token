@@ -1,0 +1,8 @@
+{
+  "signIn": "Войти",
+  "signInWithGoogle": "Войти через Google",
+  "signInWithRefreshToken": "Войти через Google (с Refresh Token)",
+  "welcome": "Добро пожаловать",
+  "email": "Электронная почта",
+  "logout": "Выйти"
+}

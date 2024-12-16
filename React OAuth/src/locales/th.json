@@ -1,0 +1,8 @@
+{
+  "signIn": "เข้าสู่ระบบ",
+  "signInWithGoogle": "เข้าสู่ระบบด้วย Google",
+  "signInWithRefreshToken": "เข้าสู่ระบบด้วย Google (พร้อม Refresh Token)",
+  "welcome": "ยินดีต้อนรับ",
+  "email": "อีเมล",
+  "logout": "ออกจากระบบ"
+}

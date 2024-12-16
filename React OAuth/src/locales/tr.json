@@ -1,0 +1,8 @@
+{
+  "signIn": "Giriş Yap",
+  "signInWithGoogle": "Google ile Giriş Yap",
+  "signInWithRefreshToken": "Google ile Giriş Yap (Refresh Token ile)",
+  "welcome": "Hoşgeldiniz",
+  "email": "E-posta",
+  "logout": "Çıkış Yap"
+}

@@ -1,0 +1,9 @@
+{
+    "signIn": "Masuk",
+    "signInWithGoogle": "Masuk dengan Google",
+    "signInWithRefreshToken": "Masuk dengan Google (dengan Refresh Token)",
+    "welcome": "Selamat Datang",
+    "email": "Email",
+    "logout": "Keluar"
+  }
+  

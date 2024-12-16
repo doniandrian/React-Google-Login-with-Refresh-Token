@@ -1,10 +1,27 @@
 import { Box, Typography, Button } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode"; // Untuk decode credential
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import {
+  GoogleLogin,
+  useGoogleLogin,
+  CredentialResponse,
+} from "@react-oauth/google";
+// Define type data
+interface UserInfo {
+  name: string;
+  email: string;
+  picture?: string;
+  sub?: string;
+}
+
+interface GoogleTokenResponse {
+  code: string;
+}
+import { useTranslation } from "react-i18next"; // Import hook i18n
 
 function SignInPage() {
+  const { t } = useTranslation(); // hook untuk mengambil string terjemahan
   const navigate = useNavigate();
 
   const LogindenganRefreshToken = useGoogleLogin({
@@ -13,12 +30,12 @@ function SignInPage() {
       try {
         console.log("Token Response (Refresh Token):", tokenResponse);
 
-        // Kirim authorization code ke backend untuk mendapatkan access_token
+        // Kirim authorization code ke backend untuk mendapatkan access token
         const response = await axios.post("http://localhost:3000/auth/google", {
           code: tokenResponse.code,
         });
 
-        const { access_token } = response.data; // Dapatkan access_token
+        const { access_token } = response.data; // mendapatkan access token
         console.log("Access Token (Refresh Token):", access_token);
 
         // Ambil data user dari Google UserInfo endpoint
@@ -48,13 +65,22 @@ function SignInPage() {
     },
   });
 
-  const handleGoogleLoginSuccess = (credentialResponse: any) => {
+  const handleGoogleLoginSuccess = (credentialResponse: CredentialResponse) => {
     try {
       console.log("Token Response (Google Login):", credentialResponse);
 
+      if (!credentialResponse.credential) {
+        throw new Error("No credential received");
+      }
+
       // Decode credential untuk mendapatkan informasi pengguna
-      const userInfo = jwtDecode(credentialResponse.credential);
+      const userInfo = jwtDecode<UserInfo>(credentialResponse.credential);
       console.log("User Info (Google Login):", userInfo);
+
+      // Validasi data pengguna
+      if (!userInfo.email) {
+        throw new Error("Invalid user information");
+      }
 
       // Simpan data pengguna ke sessionStorage
       sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
@@ -62,7 +88,8 @@ function SignInPage() {
       // Redirect ke halaman /homepage
       navigate("/homepage");
     } catch (error) {
-      console.error("Error decoding credential (Google Login):", error);
+      console.error("Error during Google Login:", error);
+      alert("Login failed. Please try again.");
     }
   };
 
@@ -73,6 +100,7 @@ function SignInPage() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        backgroundColor: "#f0f2f5", // Tambahkan background color
       }}
     >
       <Box
@@ -81,18 +109,35 @@ function SignInPage() {
           borderRadius: "8px",
           padding: "32px",
           width: "400px",
+          textAlign: "center", // Tambahkan text alignment
+          boxShadow: 3, // Gunakan predefined boxShadow
         }}
-        boxShadow={2}
       >
-        <Typography variant="h4" gutterBottom>
-          Sign In
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            marginBottom: "24px",
+            color: "#333", // Tambahkan warna yang lebih kontras
+            fontWeight: "bold",
+          }}
+        >
+          {t("signIn")} {/* Gunakan string dari i18n */}
         </Typography>
-        <Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+          }}
+        >
           {/* Login biasa */}
           <GoogleLogin
             onSuccess={handleGoogleLoginSuccess}
             onError={() => {
               console.error("Login Failed");
+              alert("Google login failed. Please try again.");
             }}
           />
 
@@ -101,10 +146,9 @@ function SignInPage() {
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ marginTop: "16px" }}
             onClick={() => LogindenganRefreshToken()}
           >
-            SIGN IN WITH GOOGLE (WITH REFRESH TOKEN)
+            {t("signInWithRefreshToken")} {/* Gunakan string dari i18n */}
           </Button>
         </Box>
       </Box>
