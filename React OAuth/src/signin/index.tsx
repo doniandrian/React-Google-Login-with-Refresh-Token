@@ -15,9 +15,6 @@ interface UserInfo {
   sub?: string;
 }
 
-interface GoogleTokenResponse {
-  code: string;
-}
 import { useTranslation } from "react-i18next"; // Import hook i18n
 
 function SignInPage() {
@@ -45,7 +42,7 @@ function SignInPage() {
             headers: {
               Authorization: `Bearer ${access_token}`,
             },
-          }
+          },
         );
 
         const userInfo = userInfoResponse.data; // Informasi user
