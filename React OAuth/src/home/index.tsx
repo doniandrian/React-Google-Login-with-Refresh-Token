@@ -16,7 +16,6 @@ interface UserInfo {
   picture?: string;
 }
 
-
 // Animasi bounce untuk logo
 const Bounce = keyframes`
   0% {
